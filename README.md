@@ -11,21 +11,19 @@ To run the script,
 chmod +x openvpn-stats.sh
 
 Then, you can simply run the script as needed, eg:
-...
-./openvpn-stats.sh
-...
+
+`./openvpn-stats.sh`
 
 Or, for constantly updated stats:
-...
-watch ./openvpn-stats.sh
-...
+
+`watch ./openvpn-stats.sh`
+
 
 Note, if you are not in the same directory as the script, you will need to reference the full path, eg:
-...
-/root/openvpn-stats.sh
-...
+
+`/root/openvpn-stats.sh`
+
 
 or
-...
-watch -n 1 /root/openvpn-stats.sh
-...
+
+`watch -n 1 /root/openvpn-stats.sh`
