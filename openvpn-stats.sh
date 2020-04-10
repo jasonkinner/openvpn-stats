@@ -2,31 +2,40 @@
 
 input_file=/var/log/openvpn/openvpn-status.log
 
-declare -a data                                                 # create array to store client data
-declare -a ip							# create array to store client private IPs
+declare -a client                                               # array to store client names
+declare -a recvd						# array to store client MB received
+declare -a sent							# array to store client MB sent
+declare -a since						# array to store client *connected since* info
+declare -a ippub						# array to store client publice IPs (and ports)
+declare -a ippriv						# array to store client private IPs
+
 i=0                                                             # keep a count of total lines
-j=0                                                             # secondary counter for private IP array
+j=0                                                             # secondary counter (not really needed)
+
 while read line; do                                             # loop through all input lines from file
     if [[ "$line" = *,* ]]; then                                # if line has a comma in it, it may contain usable data
         IFS=',' read -ra fields <<< "$line"                     # convert string to array, split by comma
         if [[ "${fields[1]}" =~ \.[0-9]{1,3}:[0-9] ]]; then     # if 2nd field seems to contain an ip address:
-                received=$((fields[2] / 2**20))                 #   extract bytes received and convert to MB
-                sent=$((fields[3] / 2**20))                     #   extract bytes sent and convertt to MB
-                # store a long string of the relevant data with tab separators
-                data[$i]="${fields[0]}"$'\t'"${received}"$'\t'$'\t'"${sent}"$'\t'$'\t'"${fields[4]}"$'\t'
+                recvd[$i]=$((fields[2] / 2**20))                #   convert bytes received to MB, store in recvd array
+                sent[$i]=$((fields[3] / 2**20))                     #   convert bytes sent to MB, store in sent array
+                client[$i]="${fields[0]}"			#   store client name into client array
+		since[$i]="${fields[4]}"			#   store connected since data into since array
+		ippub[$i]="${fields[1]}"			#   store public IP and port into ippub array
                 i=$((i+1))                                      #   increment record counter to track total clients
         fi
         if [[ "${fields[2]}" =~ \.[0-9]{1,3}:[0-9] ]]; then     # if 3rd field seems to contain an ip address:
-                ip[$j]="${fields[0]}"                           # store the private ip info in another array
-                j=$((j+1))
+                ippriv[$j]="${fields[0]}"                       #   store the private ip into ippriv array
+                j=$((j+1))					# this counter is redundant in current code
         fi
     fi
 done < $input_file
 
-# output header columns
-echo "Client"$'\t'$'\t'$'\t'"MB Recvd"$'\t'"MB Sent"$'\t'$'\t'"Since"$'\t'$'\t'$'\t'$'\t'"Private IP"
+# output header columns -- feel free to customize ordering ($'\t') prints a tab
+echo "Client"$'\t'$'\t'$'\t'"From"$'\t'$'\t'$'\t'"MB Sent"$'\t'$'\t'"MB Recvd"$'\t'"Since"$'\t'$'\t'$'\t'$'\t'"Private IP"
 
 for (( i=0; i<$j; i++ ))                # loop through the client records
 do
-        echo "${data[$i]}${ip[$i]}"     # output the client info, then private ip
+	# output the info -- ordering can be customized here
+	# arrays are: client, ippub, ipriv, sent, recvd, since
+        echo "${client[$i]}"$'\t'"${ippub[$i]}"$'\t'"${sent[$i]}"$'\t'$'\t'"${recvd[$i]}"$'\t'$'\t'"${since[$i]}"$'\t'"${ippriv[$i]}"
 done
