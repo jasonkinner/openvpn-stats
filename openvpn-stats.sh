@@ -17,7 +17,7 @@ while read line; do                                             # loop through a
         IFS=',' read -ra fields <<< "$line"                     # convert string to array, split by comma
         if [[ "${fields[1]}" =~ \.[0-9]{1,3}:[0-9] ]]; then     # if 2nd field seems to contain an ip address:
                 recvd[$i]=$((fields[2] / 2**20))                #   convert bytes received to MB, store in recvd array
-                sent[$i]=$((fields[3] / 2**20))                     #   convert bytes sent to MB, store in sent array
+                sent[$i]=$((fields[3] / 2**20))                 #   convert bytes sent to MB, store in sent array
                 client[$i]="${fields[0]}"			#   store client name into client array
 		since[$i]="${fields[4]}"			#   store connected since data into since array
 		ippub[$i]="${fields[1]}"			#   store public IP and port into ippub array
