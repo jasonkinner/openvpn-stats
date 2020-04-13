@@ -30,12 +30,13 @@ while read line; do                                             # loop through a
     fi
 done < $input_file
 
-# output header columns -- feel free to customize ordering ($'\t') prints a tab
-echo "Client"$'\t'$'\t'$'\t'"From"$'\t'$'\t'$'\t'"MB Sent"$'\t'$'\t'"MB Recvd"$'\t'"Since"$'\t'$'\t'$'\t'$'\t'"Private IP"
+# output header columns -- feel free to customize ordering (must change in loop below as well)
+printf '%-20s\t%-20s\t%8s\t%8s\t%-26s\t%-15s\n' "Client" "From (IP:port)" "MB Sent" "MB Recvd" "Connected Since" "Private IP"
+printf '%-20s\t%-20s\t%8s\t%8s\t%-26s\t%-15s\n' "------" "--------------" "-------" "--------" "---------------" "----------"
 
 for (( i=0; i<$j; i++ ))                # loop through the client records
 do
-	# output the info -- ordering can be customized here
+	# output the info -- ordering can be customized here (be sure to match ordering of column headers above
 	# arrays are: client, ippub, ipriv, sent, recvd, since
-        echo "${client[$i]}"$'\t'"${ippub[$i]}"$'\t'"${sent[$i]}"$'\t'$'\t'"${recvd[$i]}"$'\t'$'\t'"${since[$i]}"$'\t'"${ippriv[$i]}"
+	printf '%-20s\t%-20s\t%8s\t%8s\t%-26s\t%-15s\n' "${client[$i]}" "${ippub[$i]}" "${sent[$i]} MB" "${recvd[$i]} MB" "${since[$i]}" "${ippriv[$i]}"
 done
