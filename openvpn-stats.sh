@@ -24,7 +24,12 @@ while read line; do                                             # loop through a
                 i=$((i+1))                                      #   increment record counter to track total clients
         fi
         if [[ "${fields[2]}" =~ \.[0-9]{1,3}:[0-9] ]]; then     # if 3rd field seems to contain an ip address:
-                ippriv[$j]="${fields[0]}"                       #   store the private ip into ippriv array
+		for (( k=0; k<$i; k++ ))			# clients in 2nd half of log aren't always in order
+		do						#   so loop through them until we find the right one
+			if [[ "${fields[1]}" = "${client[$k]}" ]]; then
+		                ippriv[$j]="${fields[0]}"       # store the private ip into ippriv array
+			fi
+		done
                 j=$((j+1))					# this counter is redundant in current code
         fi
     fi
