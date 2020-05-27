@@ -1,6 +1,6 @@
 ## openvpn-stats
 
-**A very basic bash script to parse data from OpenVPN Community server log file (typically: openvpn-status.log)**
+**A basic bash script to parse data from OpenVPN Community server log file (typically: openvpn-status.log)**
 
 Make sure your OpenVPN server.conf file has a line similar to the following:
 
@@ -29,3 +29,8 @@ Note, if you are not in the same directory as the script, you will need to refer
 or
 
 `watch -n 1 /root/openvpn-stats.sh`
+
+
+
+I wrote this script because I couldn't find a simple linux shell script to parse the OpenVPN status log.
+I use this daily to monitor connections and data throughput per client on a cloud-based OpenVPN (Community) Server
