@@ -10,7 +10,6 @@ declare -a ippub						# array to store client publice IPs (and ports)
 declare -a ippriv						# array to store client private IPs
 
 i=0                                                             # keep a count of total lines
-j=0                                                             # secondary counter (not really needed)
 
 while read line; do                                             # loop through all input lines from file
     if [[ "$line" = *,* ]]; then                                # if line has a comma in it, it may contain usable data
@@ -27,10 +26,9 @@ while read line; do                                             # loop through a
 		for (( k=0; k<$i; k++ ))			# clients in 2nd half of log aren't always in order
 		do						#   so loop through them until we find the right one
 			if [[ "${fields[1]}" = "${client[$k]}" ]]; then
-		                ippriv[$j]="${fields[0]}"       # store the private ip into ippriv array
+		                ippriv[$k]="${fields[0]}"       # store the private ip into ippriv array
 			fi
 		done
-                j=$((j+1))					# this counter is redundant in current code
         fi
     fi
 done < $input_file
@@ -38,10 +36,9 @@ done < $input_file
 # output header columns -- feel free to customize ordering (must change in loop below as well)
 printf '%-20s\t%-20s\t%8s\t%8s\t%-26s\t%-15s\n' "Client" "From (IP:port)" "MB Sent" "MB Recvd" "Connected Since" "Private IP"
 printf '%-20s\t%-20s\t%8s\t%8s\t%-26s\t%-15s\n' "------" "--------------" "-------" "--------" "---------------" "----------"
-
-for (( i=0; i<$j; i++ ))                # loop through the client records
+for (( j=0; j<$i; j++ ))                # loop through the client records
 do
 	# output the info -- ordering can be customized here (be sure to match ordering of column headers above
 	# arrays are: client, ippub, ipriv, sent, recvd, since
-	printf '%-20s\t%-20s\t%8s\t%8s\t%-26s\t%-15s\n' "${client[$i]}" "${ippub[$i]}" "${sent[$i]} MB" "${recvd[$i]} MB" "${since[$i]}" "${ippriv[$i]}"
+	printf '%-20s\t%-20s\t%8s\t%8s\t%-26s\t%-15s\n' "${client[$j]}" "${ippub[$j]}" "${sent[$j]} MB" "${recvd[$j]} MB" "${since[$j]}" "${ippriv[$j]}"
 done
