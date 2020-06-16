@@ -42,3 +42,6 @@ do
 	# arrays are: client, ippub, ipriv, sent, recvd, since
 	printf '%-20s\t%-20s\t%8s\t%8s\t%-26s\t%-15s\n' "${client[$j]}" "${ippub[$j]}" "${sent[$j]} MB" "${recvd[$j]} MB" "${since[$j]}" "${ippriv[$j]}"
 done
+
+echo ""
+echo "Total # of Clients: $j"
