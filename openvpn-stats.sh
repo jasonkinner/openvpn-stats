@@ -44,7 +44,7 @@ printf '%-20s\t%-20s\t%8s\t%8s\t%-26s\t%-15s\n' "------" "--------------" "-----
 for (( j=0; j<$i; j++ ))                # loop through the client records
 do
 	# output the info -- ordering can be customized here (be sure to match ordering of column headers above
-	# arrays are: client, ippub, ipriv, sent, recvd, since
+	# arrays are: client, ippub, ippriv, sent, recvd, since
 	printf '%-20s\t%-20s\t%8s\t%8s\t%-26s\t%-15s\n' "${client[$j]}" "${ippub[$j]}" "${sent[$j]} MB" "${recvd[$j]} MB" "${since[$j]}" "${ippriv[$j]}"
 done
 echo "-------------------------------------------------------------------------------------------------------------------------------"
